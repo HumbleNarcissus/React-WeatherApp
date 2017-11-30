@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Output from './Output'
 import './style.css'
 
 class App extends Component {
@@ -11,7 +12,16 @@ class App extends Component {
     }
 
     search(){
-        console.log('this.state', this.state);
+        const FETCH_URL = "http://api.openweathermap.org/data/2.5/weather?q=" + this.state.query + "&appid=a77341d2973ec5002d7d4020c6782679";
+        fetch(FETCH_URL, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(json => {
+            const location = json;
+            this.setState({location});
+        });
+
     }
 
     render() {
@@ -23,22 +33,22 @@ class App extends Component {
                        <input type="text" className="form-control" placeholder="Enter email"
                           value={this.state.query} onChange={ event => {this.setState({query: event.target.value})} }
                           onKeyPress = {event => {
-                              if (event.key === 'Enter'){
+                              if (event.key === 'Enter' && this.state.query !== ''){
                                   this.search();
                               }
                           }}
                         />
                        <span className="input-group-btn">
-                           <button className="btn btn-secondary" type="button" onClick={() => this.search()}>
+                           <button className="btn btn-secondary" type="button" onClick={
+                               () => {
+                                   if (this.state.query !== ''){ this.search()}
+                           }}>
                             Search</button>
                        </span>
                    </div>
-                  </div>
-                  <div className="weather">
-                    <div className="city"></div>
-                    <img className="icon" src="" alt=""/>
-                    <div className="info"></div>
-                    <div className="degrees"></div>
+                   <Output
+                       location={this.state.location}
+                   />
                   </div>
                   <div className="footer">
                     <p>Author: <a href="https://github.com/HumbleNarcissus">Maciej Tarach</a></p>
