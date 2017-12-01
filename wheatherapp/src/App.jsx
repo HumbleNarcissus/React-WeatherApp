@@ -16,12 +16,17 @@ class App extends Component {
         fetch(FETCH_URL, {
             method: 'GET'
         })
-        .then(response => response.json())
-        .then(json => {
-            const location = json;
-            this.setState({location});
-        });
+        .then(response => {
+            if (response.status !== 200) {
+              return;
+            }
 
+            response.json().then( (data) => {
+                const location = data;
+                this.setState({location});
+            })
+
+        });
     }
 
     render() {
@@ -30,7 +35,7 @@ class App extends Component {
                   <div className="search">
                     <h1>WeatherApp</h1>
                     <div className="input-group">
-                       <input type="text" className="form-control" placeholder="Enter email"
+                       <input type="text" className="form-control" placeholder="Enter city"
                           value={this.state.query} onChange={ event => {this.setState({query: event.target.value})} }
                           onKeyPress = {event => {
                               if (event.key === 'Enter' && this.state.query !== ''){
@@ -46,9 +51,13 @@ class App extends Component {
                             Search</button>
                        </span>
                    </div>
-                   <Output
-                       location={this.state.location}
-                   />
+                   {
+                       this.state.location !== null
+                        ?<Output
+                           location={this.state.location}
+                         />
+                        : <div></div>
+                   }
                   </div>
                   <div className="footer">
                     <p>Author: <a href="https://github.com/HumbleNarcissus">Maciej Tarach</a></p>

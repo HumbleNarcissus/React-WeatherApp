@@ -33,11 +33,24 @@ input {
   color: white;
   width: 350px;
   height: 300px;
+  padding-top: 50px;
+}
+
+.icon {
+    width: 100px;
+}
+
+.weather h2 {
+    font-size: 40px;
 }
 
 .footer {
   color: white;
   font-weight: bold;
+}
+
+.footer {
+    padding-top: 10px;
 }
 
 a:visited {
